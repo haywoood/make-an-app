@@ -4,22 +4,22 @@ var webpack = require('webpack');
 module.exports = {
   devtool: 'eval',
   entry: [
-    'react-hot-loader/patch',
     'webpack-dev-server/client?http://0.0.0.0:3000',
-    'webpack/hot/only-dev-server',
-    './src/index'
+    './src/app'
   ],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
     publicPath: '/static/'
   },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin()
-  ],
   resolve: {
     extensions: ['', '.js']
   },
+  plugins: [
+    new webpack.ProvidePlugin({
+        React: "react",
+    })
+  ],
   module: {
     loaders: [{
       test: /\.js?$/,

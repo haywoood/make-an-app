@@ -1,39 +1,36 @@
-import {state, ui, render} from "./web"
+import { state, ui, render } from "@lsdafjklsd/essence"
+import Counter, { getCounterDefaultState } from "./counter"
 
-const appState = state({
-  count: 0
+
+// State
+const AppState = state({
+  counterApps: [getCounterDefaultState()]
 })
 
-const resetCount = () => {
-  appState.count = 0
-}
 
-const incrementCount = () => {
-  appState.count = appState.count + 1
-}
-
-const decrementCount = () => {
-  appState.count = appState.count - 1
-}
-
-const App = ui(() => {
-  return (
-    <div style={{display: "flex", flexDirection: "column", width: 300}}>
-      <h1 onClick={resetCount}>
-        <strong>current count: {appState.count}</strong>
-      </h1>
-
-      <button onClick={incrementCount}>
-        increment count
-      </button>
-
-      <br />
-
-      <button onClick={decrementCount}>
-        decrement count
-      </button>
-    </div>
+// Actions
+const handleDeleteCounterApp = (counterApps, id) =>
+  counterApps.replace(
+    counterApps.filter( counterApp => counterApp.count.id != id )
   )
-})
 
-render(<App />)
+const addCounterApp = counterApps =>
+  counterApps.push(getCounterDefaultState())
+
+
+// View
+const App = ui(props =>
+  <div style={{width: 300, display: "flex", flexDirection: "column"}}>
+    <h1>Counter Apps</h1>
+    {props.counterApps.map(counterApp =>
+      <Counter count={counterApp.count}
+               handleDelete={id => handleDeleteCounterApp(props.counterApps, id)} />
+    )}
+    <div>
+      Add a new counter: <button onClick={() => addCounterApp(props.counterApps)}>+</button>
+    </div>
+  </div>
+)
+
+
+render(<App counterApps={AppState.counterApps} />, "root")
